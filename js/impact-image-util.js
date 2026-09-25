@@ -122,6 +122,12 @@ app.registerExtension({
 					const stackTrace = new Error().stack;
 					if(v && v.length == 0)
 						return;
+					else if(v === undefined && stackTrace.includes('updateNodeWithServerReferences')) {
+						// new mask editor writes the widget value store directly, bypassing w.value
+						if(typeof node.properties?.image === 'string')
+							w._value = node.properties.image;
+						return;
+					}
 					else if(stackTrace.includes('pasteFromClipspace')) {
 						let sp = new URLSearchParams(v[0].src.split("?")[1]);
 						let str = "";
